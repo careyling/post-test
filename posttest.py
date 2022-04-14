@@ -7,14 +7,14 @@ myapp = Flask(__name__)
 # 测试数据暂时存放
 tasks = [
     {
-        'id': 1,
-        'title': 'id1',
-        'done': True
+        'id': '1',
+        'v1': '2',
+        'v2': '3'
     },
     {
-        'id': 2,
-        'title': 'id2',
-        'done': False
+        'id': '2',
+        'v1': '3',
+        'v2': '4'
     }
 ]
 
@@ -25,38 +25,37 @@ def index():
 @myapp.route('/get_task/<task_id>', methods=['GET'])
 def get_task(task_id):
     for task in tasks:
-        if(task['id']==int(task_id)):
+        if(task['id']==task_id):
             return jsonify({'tasks': task})
     abort(404)
 
-#curl "http://127.0.0.1:5000/post_tasks/" -H "Content-Type: application/json" -d "{\"title\":\"id\"}" -X POST
-@myapp.route('/post_tasks/', methods=['POST'])
-def create_task():
-    if not request.json or not 'title' in request.json:
-        abort(400)
+#curl "http://127.0.0.1:5000/set_task/" -H "Content-Type: application/json" -d "{\"id\":\"3\",\"v1\":\"4\",\"v2\":\"5\"}" -X POST
+@myapp.route('/set_task/', methods=['POST'])
+def set_task():
+    jsdata = request.json
     task = {
-        'id': tasks[-1]['id'] + 1,
-        'title': request.json['title']+str(tasks[-1]['id'] + 1),
-        'done': False
+        'id': jsdata['id'],
+        'v1': jsdata['v1'],
+        'v2': jsdata['v2']
     }
     tasks.append(task)
-    return jsonify({'task': task}), 201
+    return jsonify({'result': 'OK'})
 
 #curl "http://127.0.0.1:5000/upd_tasks/2" -H "Content-Type: application/json" -d "{\"title\":\"upd\"}" -X PUT
-@myapp.route('/upd_tasks/<task_id>', methods=['PUT'])
+@myapp.route('/upd_task/<task_id>', methods=['PUT'])
 def update_task(task_id):
     for task in tasks:
-        if(task['id']==int(task_id)):
+        if(task['id']==task_id):
             u_task = task
     if u_task:
         u_task['title'] = request.json['title']
         return jsonify({'tasks': u_task})
 
 #curl "http://127.0.0.1:5000/del_tasks/1" -X DELETE
-@myapp.route('/del_tasks/<task_id>', methods=['DELETE'])
+@myapp.route('/del_task/<task_id>', methods=['DELETE'])
 def delete_task(task_id):
     for task in tasks:
-        if(task['id']==int(task_id)):
+        if(task['id']==task_id):
             d_task = task
     if d_task:
         tasks.remove(d_task)
@@ -64,5 +63,5 @@ def delete_task(task_id):
     return jsonify({'result': False})
 
 
-# if __name__ == '__main__':
-#     myapp.run(debug=True, host='127.0.0.1', port=5000)
+if __name__ == '__main__':
+    myapp.run(debug=True, host='127.0.0.1', port=5000)
