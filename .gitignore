@@ -1,0 +1,8 @@
+#windows
+Thumbs.db
+bk
+.github
+.venv
+.vscode
+__pycache__
+test.py
