@@ -2,6 +2,13 @@ exit#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from flask import Flask, abort, request, jsonify
 
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(verbose=True)
+
+import os
+
+TEST_STR = os.environ['TEST_STR']
+
 myapp = Flask(__name__)
 
 # 测试数据暂时存放
@@ -20,7 +27,7 @@ tasks = [
 
 @myapp.route('/', methods=['GET'])
 def index():
-    return jsonify({'tasks': tasks})
+    return jsonify({TEST_STR: tasks})
 
 @myapp.route('/get_task/<task_id>', methods=['GET'])
 def get_task(task_id):
