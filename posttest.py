@@ -2,7 +2,7 @@ exit#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from flask import Flask, abort, request, jsonify
 
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv
 load_dotenv(verbose=True)
 
 import os
